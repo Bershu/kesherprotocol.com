@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kesher Protocol — Sovereign Infrastructure for the New Financial System</title>
+<meta name="description" content="Protocol Factory building sovereign blockchain infrastructure. AEGIS Sovereign Node v4.0 and VESTFI Protocol — registered IP on XRP Ledger.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #050608;
+  --bg2:     #090b12;
+  --card:    #0d1020;
+  --border:  #151a2e;
+  --cyan:    #00e5ff;
+  --green:   #00ff88;
+  --gold:    #f5c842;
+  --purple:  #9b6dff;
+  --text:    #d4daf0;
+  --dim:     #3d4870;
+  --red:     #ff3355;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:1000;
+  opacity:.4;
+}
+
+/* ── GRID LINES ── */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity:.25;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 20px 48px;
+  background: rgba(5,6,8,.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+}
+
+.nav-logo-mark {
+  width:36px; height:36px;
+  border:1.5px solid var(--cyan);
+  display:grid;
+  place-items:center;
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  color:var(--cyan);
+  position:relative;
+  animation: pulse-border 3s ease-in-out infinite;
+}
+
+@keyframes pulse-border {
+  0%,100% { box-shadow: 0 0 0 0 rgba(0,229,255,.3); }
+  50%      { box-shadow: 0 0 0 8px rgba(0,229,255,0); }
+}
+
+.nav-logo-text {
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.08em;
+  color:var(--text);
+}
+
+.nav-links {
+  display:flex;
+  gap:40px;
+  list-style:none;
+}
+
+.nav-links a {
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  letter-spacing:.15em;
+  color:var(--dim);
+  text-decoration:none;
+  text-transform:uppercase;
+  transition:color .2s;
+}
+
+.nav-links a:hover { color:var(--cyan); }
+
+.nav-cta {
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  letter-spacing:.1em;
+  color:var(--bg);
+  background:var(--cyan);
+  border:none;
+  padding:10px 24px;
+  cursor:pointer;
+  text-decoration:none;
+  text-transform:uppercase;
+  transition:opacity .2s;
+}
+
+.nav-cta:hover { opacity:.85; }
+
+/* ── HERO ── */
+.hero {
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:120px 48px 80px;
+  z-index:1;
+  overflow:hidden;
+}
+
+.hero-bg-shape {
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:600px; height:600px;
+  border:1px solid rgba(0,229,255,.06);
+  border-radius:50%;
+  animation: rotate-slow 40s linear infinite;
+}
+
+.hero-bg-shape::before {
+  content:'';
+  position:absolute;
+  inset:60px;
+  border:1px solid rgba(0,229,255,.04);
+  border-radius:50%;
+}
+
+.hero-bg-shape::after {
+  content:'';
+  position:absolute;
+  inset:120px;
+  border:1px solid rgba(0,229,255,.03);
+  border-radius:50%;
+}
+
+@keyframes rotate-slow {
+  to { transform:translate(-50%,-50%) rotate(360deg); }
+}
+
+.hero-content {
+  max-width:900px;
+  text-align:center;
+  position:relative;
+  z-index:2;
+}
+
+.hero-eyebrow {
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  letter-spacing:.3em;
+  color:var(--cyan);
+  text-transform:uppercase;
+  margin-bottom:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+}
+
+.hero-eyebrow::before,
+.hero-eyebrow::after {
+  content:'';
+  width:40px;
+  height:1px;
+  background:var(--cyan);
+  opacity:.4;
+}
+
+h1 {
+  font-size: clamp(44px, 7vw, 88px);
+  font-weight:800;
+  line-height:1.0;
+  letter-spacing:-.02em;
+  color:var(--text);
+  margin-bottom:12px;
+}
+
+h1 span {
+  display:block;
+  color:var(--cyan);
+  font-style:italic;
+}
+
+.hero-sub {
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  letter-spacing:.05em;
+  color:var(--dim);
+  margin: 24px auto 48px;
+  max-width:560px;
+  line-height:1.9;
+}
+
+.hero-actions {
+  display:flex;
+  gap:16px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.btn-primary {
+  background:var(--cyan);
+  color:var(--bg);
+  padding:14px 36px;
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-decoration:none;
+  border:none;
+  cursor:pointer;
+  transition:opacity .2s;
+}
+
+.btn-primary:hover { opacity:.85; }
+
+.btn-outline {
+  border:1px solid var(--border);
+  color:var(--dim);
+  padding:14px 36px;
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:border-color .2s, color .2s;
+}
+
+.btn-outline:hover { border-color:var(--cyan); color:var(--cyan); }
+
+/* ── TICKER ── */
+.ticker {
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:14px 0;
+  overflow:hidden;
+  position:relative;
+  z-index:1;
+}
+
+.ticker-inner {
+  display:flex;
+  gap:0;
+  animation: ticker 20s linear infinite;
+  white-space:nowrap;
+}
+
+@keyframes ticker {
+  from { transform:translateX(0); }
+  to   { transform:translateX(-50%); }
+}
+
+.ticker-item {
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  letter-spacing:.15em;
+  color:var(--dim);
+  padding:0 40px;
+  text-transform:uppercase;
+}
+
+.ticker-item span { color:var(--cyan); margin-right:8px; }
+
+/* ── SECTION ── */
+section {
+  position:relative;
+  z-index:1;
+}
+
+.section-inner {
+  max-width:1200px;
+  margin:0 auto;
+  padding:100px 48px;
+}
+
+.section-label {
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  letter-spacing:.3em;
+  color:var(--cyan);
+  text-transform:uppercase;
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.section-label::before {
+  content:'';
+  width:24px;
+  height:1px;
+  background:var(--cyan);
+}
+
+h2 {
+  font-size:clamp(32px, 4vw, 52px);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-.02em;
+  margin-bottom:16px;
+}
+
+.section-desc {
+  font-family:'Space Mono',monospace;
+  font-size:13px;
+  color:var(--dim);
+  line-height:1.9;
+  max-width:560px;
+}
+
+/* ── PROTOCOLS GRID ── */
+.protocols-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2px;
+  margin-top:64px;
+}
+
+.protocol-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:48px;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .3s;
+}
+
+.protocol-card:hover { border-color:var(--cyan); }
+
+.protocol-card::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:2px;
+  transition:opacity .3s;
+  opacity:0;
+}
+
+.protocol-card:hover::before { opacity:1; }
+
+.protocol-card.aegis::before { background:var(--cyan); }
+.protocol-card.vestfi::before { background:var(--gold); }
+
+.protocol-number {
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  letter-spacing:.2em;
+  color:var(--dim);
+  margin-bottom:32px;
+}
+
+.protocol-icon {
+  width:48px; height:48px;
+  border:1px solid;
+  display:grid;
+  place-items:center;
+  font-family:'Space Mono',monospace;
+  font-weight:700;
+  font-size:16px;
+  margin-bottom:24px;
+}
+
+.protocol-card.aegis .protocol-icon { border-color:var(--cyan); color:var(--cyan); }
+.protocol-card.vestfi .protocol-icon { border-color:var(--gold); color:var(--gold); }
+
+.protocol-card h3 {
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:-.01em;
+  margin-bottom:8px;
+}
+
+.protocol-card.aegis h3 { color:var(--cyan); }
+.protocol-card.vestfi h3 { color:var(--gold); }
+
+.protocol-tagline {
+  font-size:14px;
+  color:var(--dim);
+  margin-bottom:32px;
+  line-height:1.6;
+}
+
+.protocol-stats {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-bottom:32px;
+}
+
+.stat {
+  padding:16px;
+  background:rgba(255,255,255,.02);
+  border:1px solid var(--border);
+}
+
+.stat-value {
+  font-family:'Space Mono',monospace;
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.protocol-card.aegis .stat-value { color:var(--cyan); }
+.protocol-card.vestfi .stat-value { color:var(--gold); }
+
+.stat-label {
+  font-family:'Space Mono',monospace;
+  font-size:9px;
+  letter-spacing:.15em;
+  color:var(--dim);
+  text-transform:uppercase;
+}
+
+.protocol-link {
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  transition:gap .2s;
+}
+
+.protocol-card.aegis .protocol-link { color:var(--cyan); }
+.protocol-card.vestfi .protocol-link { color:var(--gold); }
+.protocol-link:hover { gap:14px; }
+
+/* ── IP CHAIN ── */
+.ip-section {
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+
+.ip-chain {
+  display:flex;
+  gap:0;
+  margin-top:48px;
+  overflow-x:auto;
+}
+
+.ip-block {
+  flex:1;
+  min-width:220px;
+  padding:32px;
+  border:1px solid var(--border);
+  position:relative;
+}
+
+.ip-block::after {
+  content:'→';
+  position:absolute;
+  right:-14px;
+  top:50%;
+  transform:translateY(-50%);
+  font-family:'Space Mono',monospace;
+  color:var(--dim);
+  font-size:14px;
+  z-index:2;
+}
+
+.ip-block:last-child::after { display:none; }
+
+.ip-ledger {
+  font-family:'Space Mono',monospace;
+  font-size:9px;
+  letter-spacing:.2em;
+  color:var(--dim);
+  text-transform:uppercase;
+  margin-bottom:16px;
+}
+
+.ip-project {
+  font-size:18px;
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:8px;
+}
+
+.ip-hash {
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--cyan);
+  word-break:break-all;
+  margin-bottom:12px;
+  opacity:.7;
+}
+
+.ip-date {
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--dim);
+}
+
+.ip-verify {
+  margin-top:12px;
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--green);
+  text-decoration:none;
+  letter-spacing:.05em;
+}
+
+.ip-verify:hover { text-decoration:underline; }
+
+/* ── MARKET ── */
+.market-grid {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:2px;
+  margin-top:64px;
+}
+
+.market-item {
+  padding:40px 32px;
+  background:var(--card);
+  border:1px solid var(--border);
+}
+
+.market-value {
+  font-size:36px;
+  font-weight:800;
+  color:var(--cyan);
+  letter-spacing:-.02em;
+  margin-bottom:8px;
+  font-family:'Space Mono',monospace;
+}
+
+.market-label {
+  font-size:14px;
+  color:var(--dim);
+  line-height:1.5;
+}
+
+/* ── CONTACT ── */
+.contact-section {
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:80px 64px;
+  margin-top:64px;
+  position:relative;
+  overflow:hidden;
+}
+
+.contact-section::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+}
+
+.contact-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+
+.contact-info h2 {
+  font-size:clamp(28px, 3vw, 44px);
+  margin-bottom:20px;
+}
+
+.contact-links {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:32px;
+}
+
+.contact-link {
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  letter-spacing:.05em;
+  color:var(--dim);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  transition:color .2s;
+}
+
+.contact-link:hover { color:var(--cyan); }
+
+.contact-link-icon {
+  width:8px; height:8px;
+  border-radius:50%;
+  background:var(--cyan);
+  flex-shrink:0;
+}
+
+.contact-form {
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:14px 18px;
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  outline:none;
+  transition:border-color .2s;
+  width:100%;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus { border-color:var(--cyan); }
+
+.contact-form textarea { height:120px; resize:none; }
+
+.contact-form button {
+  background:var(--cyan);
+  color:var(--bg);
+  border:none;
+  padding:14px;
+  font-family:'Space Mono',monospace;
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:opacity .2s;
+}
+
+.contact-form button:hover { opacity:.85; }
+
+/* ── FOOTER ── */
+footer {
+  border-top:1px solid var(--border);
+  padding:40px 48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:relative;
+  z-index:1;
+}
+
+.footer-left {
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--dim);
+  line-height:1.8;
+}
+
+.footer-right {
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--dim);
+  text-align:right;
+  line-height:1.8;
+}
+
+.footer-right a {
+  color:var(--cyan);
+  text-decoration:none;
+}
+
+/* ── ANIMATIONS ── */
+.fade-in {
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+
+.fade-in.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width:768px) {
+  nav { padding:16px 24px; }
+  .nav-links { display:none; }
+  .section-inner { padding:64px 24px; }
+  .protocols-grid { grid-template-columns:1fr; }
+  .market-grid { grid-template-columns:1fr 1fr; }
+  .contact-grid { grid-template-columns:1fr; gap:40px; }
+  footer { flex-direction:column; gap:16px; text-align:center; }
+  .footer-right { text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#top" class="nav-logo">
+    <div class="nav-logo-mark">KP</div>
+    <span class="nav-logo-text">KESHER PROTOCOL</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#protocols">Protocols</a></li>
+    <li><a href="#ip">IP Registry</a></li>
+    <li><a href="#market">Market</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Request Demo</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg-shape"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Protocol Factory · Colombia · Est. 2026</div>
+    <h1>
+      Sovereign Infrastructure
+      <span>for the New Financial System</span>
+    </h1>
+    <p class="hero-sub">
+      Building verifiable governance protocols for autonomous AI
+      and institutional-grade RWA tokenization.
+      IP registered immutably on XRP Ledger.
+    </p>
+    <div class="hero-actions">
+      <a href="#protocols" class="btn-primary">Explore Protocols</a>
+      <a href="#contact" class="btn-outline">Request Demo →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span>◈</span> AEGIS Sovereign Node v4.0</span>
+    <span class="ticker-item"><span>◈</span> VESTFI Protocol v2.0</span>
+    <span class="ticker-item"><span>◈</span> XRP Ledger · IP Registered</span>
+    <span class="ticker-item"><span>◈</span> XDC Network · XLM Stellar</span>
+    <span class="ticker-item"><span>◈</span> NIST FIPS 203/204 · Post-Quantum</span>
+    <span class="ticker-item"><span>◈</span> ISO 20022 Native · CBDC Ready</span>
+    <span class="ticker-item"><span>◈</span> Colombia · Built Sovereign</span>
+    <span class="ticker-item"><span>◈</span> AEGIS Sovereign Node v4.0</span>
+    <span class="ticker-item"><span>◈</span> VESTFI Protocol v2.0</span>
+    <span class="ticker-item"><span>◈</span> XRP Ledger · IP Registered</span>
+    <span class="ticker-item"><span>◈</span> XDC Network · XLM Stellar</span>
+    <span class="ticker-item"><span>◈</span> NIST FIPS 203/204 · Post-Quantum</span>
+    <span class="ticker-item"><span>◈</span> ISO 20022 Native · CBDC Ready</span>
+    <span class="ticker-item"><span>◈</span> Colombia · Built Sovereign</span>
+  </div>
+</div>
+
+<!-- PROTOCOLS -->
+<section id="protocols">
+  <div class="section-inner">
+    <div class="fade-in">
+      <div class="section-label">Our Protocols</div>
+      <h2>Two Protocols.<br>One Infrastructure.</h2>
+      <p class="section-desc">
+        Both protocols run on the same sovereign multi-chain infrastructure,
+        registered on XRP Ledger, and governed by verifiable cryptographic proofs.
+      </p>
+    </div>
+
+    <div class="protocols-grid fade-in">
+      <!-- AEGIS -->
+      <div class="protocol-card aegis">
+        <div class="protocol-number">PROTOCOL 01 · GOVERNANCE</div>
+        <div class="protocol-icon">AS</div>
+        <h3>AEGIS</h3>
+        <p class="protocol-tagline">
+          Verifiable Governance Framework for Autonomous AI Systems.
+          10 sovereign layers ensuring no AI operates without explicit human consent.
+        </p>
+        <div class="protocol-stats">
+          <div class="stat">
+            <div class="stat-value">10</div>
+            <div class="stat-label">Sovereign Layers</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Active Chains</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">4s</div>
+            <div class="stat-label">Payroll 1K employees</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">v4.0</div>
+            <div class="stat-label">Current Version</div>
+          </div>
+        </div>
+        <a href="https://contempt-zen-atom.ngrok-free.dev" target="_blank" class="protocol-link">
+          Live Dashboard →
+        </a>
+      </div>
+
+      <!-- VESTFI -->
+      <div class="protocol-card vestfi">
+        <div class="protocol-number">PROTOCOL 02 · RWA</div>
+        <div class="protocol-icon">VF</div>
+        <h3>VESTFI</h3>
+        <p class="protocol-tagline">
+          Vacation Ownership reimagined as Institutional-Grade Liquid RWA.
+          The first hospitality RWA protocol designed for global asset managers.
+        </p>
+        <div class="protocol-stats">
+          <div class="stat">
+            <div class="stat-value">13.6%</div>
+            <div class="stat-label">Projected Annual Yield</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">$312M</div>
+            <div class="stat-label">Capital Potential 200 rooms</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">$50</div>
+            <div class="stat-label">Entry from (VST Token)</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">v2.0</div>
+            <div class="stat-label">Current Version</div>
+          </div>
+        </div>
+        <a href="mailto:vestfi@kesherprotocol.com" class="protocol-link">
+          Request Whitepaper →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IP CHAIN -->
+<section class="ip-section" id="ip">
+  <div class="section-inner">
+    <div class="fade-in">
+      <div class="section-label">IP Registry · XRP Ledger</div>
+      <h2>Immutable Proof of Authorship</h2>
+      <p class="section-desc">
+        Every protocol registered on XRP Ledger public blockchain.
+        Verifiable by anyone, anywhere, at any time.
+        No intermediaries. No trust required.
+      </p>
+    </div>
+
+    <div class="ip-chain fade-in">
+      <div class="ip-block">
+        <div class="ip-ledger">Ledger 104,216,729</div>
+        <div class="ip-project">AEGIS Sovereign Node v4.0</div>
+        <div class="ip-hash">1726CB652978D34EA2BF9626749AA00187D7CDDD...</div>
+        <div class="ip-date">May 14, 2026 · Colombia</div>
+        <a href="https://xrpscan.com/tx/1726CB652978D34EA2BF9626749AA00187D7CDDDABEC7107ED50F39E6752382B" target="_blank" class="ip-verify">→ Verify on XRPScan</a>
+      </div>
+      <div class="ip-block">
+        <div class="ip-ledger">Ledger 104,502,267</div>
+        <div class="ip-project">VESTFI Protocol v2.0</div>
+        <div class="ip-hash">64B1A3E188B25EABBBAB06AF2351F603B0B32E41...</div>
+        <div class="ip-date">May 26, 2026 · Colombia</div>
+        <a href="https://xrpscan.com/tx/64B1A3E188B25EABBBAB06AF2351F603B0B32E4100E4BAF5C1C1E12B8460FBA5" target="_blank" class="ip-verify">→ Verify on XRPScan</a>
+      </div>
+      <div class="ip-block">
+        <div class="ip-ledger">Ledger 104,510,497</div>
+        <div class="ip-project">VESTFI Protocol v2.0 · Updated</div>
+        <div class="ip-hash">6DB96FEEC960EB272F30F9D4B960F6483A462E1C...</div>
+        <div class="ip-date">May 27, 2026 · Colombia</div>
+        <a href="https://xrpscan.com/tx/6DB96FEEC960EB272F30F9D4B960F6483A462E1C961D817E181EAE9C9544F451" target="_blank" class="ip-verify">→ Verify on XRPScan</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market">
+  <div class="section-inner">
+    <div class="fade-in">
+      <div class="section-label">Total Addressable Market</div>
+      <h2>The Infrastructure<br>the Market Demands</h2>
+    </div>
+    <div class="market-grid fade-in">
+      <div class="market-item">
+        <div class="market-value">$40T</div>
+        <div class="market-label">Global Trade Finance · XDC ISO 20022</div>
+      </div>
+      <div class="market-item">
+        <div class="market-value">$22B</div>
+        <div class="market-label">TimeShare Market 2024 · VESTFI RWA</div>
+      </div>
+      <div class="market-item">
+        <div class="market-value">$32B</div>
+        <div class="market-label">RWA On-Chain · May 2026</div>
+      </div>
+      <div class="market-item">
+        <div class="market-value">$89B</div>
+        <div class="market-label">Sovereign AI Security 2030</div>
+      </div>
+      <div class="market-item">
+        <div class="market-value">$55B</div>
+        <div class="market-label">Automated RegTech 2030</div>
+      </div>
+      <div class="market-item">
+        <div class="market-value">$312M</div>
+        <div class="market-label">VESTFI Capital Potential · 200 rooms</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-section fade-in">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="section-label">Contact</div>
+          <h2>Build Sovereign Infrastructure Together</h2>
+          <p class="section-desc">
+            We work with institutions, funds, and strategic partners
+            ready to deploy verifiable governance and RWA infrastructure.
+          </p>
+          <div class="contact-links">
+            <a href="mailto:contact@kesherprotocol.com" class="contact-link">
+              <span class="contact-link-icon"></span>
+              contact@kesherprotocol.com
+            </a>
+            <a href="mailto:aegis@kesherprotocol.com" class="contact-link">
+              <span class="contact-link-icon" style="background:var(--cyan)"></span>
+              aegis@kesherprotocol.com · AEGIS Protocol
+            </a>
+            <a href="mailto:vestfi@kesherprotocol.com" class="contact-link">
+              <span class="contact-link-icon" style="background:var(--gold)"></span>
+              vestfi@kesherprotocol.com · VESTFI Protocol
+            </a>
+          </div>
+        </div>
+        <form class="contact-form" action="https://formspree.io/f/xykvkldo" method="POST">
+          <input type="text" name="name" placeholder="Name / Organization" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="text" name="interest" placeholder="AEGIS · VESTFI · Partnership · Investment">
+          <textarea name="message" placeholder="Tell us about your use case"></textarea>
+          <button type="submit">Request Private Demo →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <strong style="color:var(--text)">KESHER PROTOCOL</strong><br>
+    Protocol Factory · Colombia · Est. 2026<br>
+    contact@kesherprotocol.com · kesherprotocol.com
+  </div>
+  <div class="footer-right">
+    AEGIS IP: <a href="https://xrpscan.com/tx/1726CB652978D34EA2BF9626749AA00187D7CDDDABEC7107ED50F39E6752382B" target="_blank">1726CB65...</a><br>
+    VESTFI IP: <a href="https://xrpscan.com/tx/6DB96FEEC960EB272F30F9D4B960F6483A462E1C961D817E181EAE9C9544F451" target="_blank">6DB96FEE...</a><br>
+    XRP Ledger · Immutable · Public · Verifiable
+  </div>
+</footer>
+
+<script>
+// Fade in on scroll
+const observer = new IntersectionObserver(
+  entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')),
+  { threshold: 0.1, rootMargin: '-40px' }
+);
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Contact form
+const form = document.querySelector('.contact-form');
+if (form) {
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = form.querySelector('button');
+    btn.textContent = 'Sending...';
+    btn.style.opacity = '.7';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(form)))
+      });
+      if (res.ok) {
+        btn.textContent = '✓ Sent — We will respond within 24h';
+        btn.style.background = 'var(--green)';
+        form.reset();
+      } else {
+        btn.textContent = 'Error — try again';
+        btn.style.opacity = '1';
+      }
+    } catch {
+      btn.textContent = 'Error — contact@kesherprotocol.com';
+      btn.style.opacity = '1';
+    }
+  });
+}
+</script>
+</body>
+</html>
