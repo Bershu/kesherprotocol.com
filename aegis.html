@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS Sovereign Node — Kesher Protocol</title>
+<meta name="description" content="Framework de gobernanza verificable para sistemas autónomos de IA. Multi-chain. Post-quantum. Soberano.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #040D1A;
+    --navy2:  #071426;
+    --gold:   #C9A84C;
+    --gold2:  #E8C96A;
+    --cyan:   #00D4FF;
+    --white:  #F0F4FF;
+    --dim:    #6B7FA3;
+    --border: rgba(201,168,76,0.2);
+    --glow:   0 0 40px rgba(0,212,255,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── GRID BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(4,13,26,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+  }
+
+  .nav-hex {
+    width: 36px; height: 36px;
+    background: transparent;
+    border: 2px solid var(--cyan);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--cyan);
+    letter-spacing: 0.02em;
+  }
+
+  .nav-name {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--dim);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-name span { color: var(--gold); }
+
+  .nav-back {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--dim);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--gold); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 140px 40px 80px;
+    z-index: 1;
+  }
+
+  /* Radial glow */
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -60%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--cyan);
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 6px 18px;
+    border-radius: 2px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.4s forwards;
+  }
+
+  .hero-title .gold { color: var(--gold); }
+  .hero-title .dim  { color: var(--dim); font-weight: 400; }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--dim);
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 60px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.6s forwards;
+  }
+
+  .hero-sub strong { color: var(--white); font-weight: 600; }
+
+  /* NODE ID PILL */
+  .node-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid var(--border);
+    padding: 10px 24px;
+    border-radius: 2px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 60px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.7s forwards;
+  }
+
+  .node-pill span { color: var(--dim); }
+
+  /* CTA BUTTON */
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: var(--navy);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    padding: 18px 48px;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.9s forwards;
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(201,168,76,0.35);
+  }
+
+  .cta-arrow { font-size: 18px; transition: transform 0.2s; }
+  .cta-btn:hover .cta-arrow { transform: translateX(4px); }
+
+  /* SCROLL HINT */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 1.2s forwards;
+  }
+
+  .scroll-hint span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--dim), transparent);
+    animation: scroll-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-pulse {
+    0%, 100% { opacity: 0.3; }
+    50%       { opacity: 1; }
+  }
+
+  /* ── CONCEPT STRIP ── */
+  .concept {
+    position: relative;
+    z-index: 1;
+    padding: 100px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--cyan);
+    margin-bottom: 24px;
+  }
+
+  .concept-text {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--white);
+    max-width: 780px;
+  }
+
+  .concept-text .gold { color: var(--gold); }
+  .concept-text .dim  { color: var(--dim); }
+
+  /* ── LAYERS GRID ── */
+  .layers-section {
+    position: relative;
+    z-index: 1;
+    padding: 60px 60px 100px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .layers-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+  }
+
+  .layers-title {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .layers-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-align: right;
+    max-width: 200px;
+    line-height: 1.5;
+  }
+
+  .layers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  .layer-card {
+    position: relative;
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    padding: 28px 28px 24px;
+    transition: border-color 0.3s, background 0.3s;
+    overflow: hidden;
+  }
+
+  .layer-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .layer-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    background: rgba(7,20,38,0.9);
+  }
+
+  .layer-card:hover::before { opacity: 1; }
+
+  .layer-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+  }
+
+  .layer-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .layer-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+  }
+
+  /* LOCKED overlay */
+  .layer-locked {
+    position: absolute;
+    inset: 0;
+    background: rgba(4,13,26,0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .layer-card:hover .layer-locked {
+    opacity: 1;
+  }
+
+  .lock-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    border: 1px solid var(--border);
+    padding: 8px 20px;
+  }
+
+  /* ── CHAIN STATUS ── */
+  .chains-section {
+    position: relative;
+    z-index: 1;
+    padding: 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .chains-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    margin-top: 40px;
+  }
+
+  .chain-card {
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .chain-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin: 0 auto 14px;
+  }
+
+  .chain-dot.active {
+    background: #22C55E;
+    box-shadow: 0 0 12px rgba(34,197,94,0.6);
+    animation: dot-pulse 2s ease-in-out infinite;
+  }
+
+  .chain-dot.pending {
+    background: var(--dim);
+  }
+
+  @keyframes dot-pulse {
+    0%, 100% { box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+    50%       { box-shadow: 0 0 16px rgba(34,197,94,0.8); }
+  }
+
+  .chain-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .chain-ver {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── IP SEAL ── */
+  .seal-section {
+    position: relative;
+    z-index: 1;
+    padding: 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .seal-box {
+    background: rgba(201,168,76,0.04);
+    border: 1px solid var(--border);
+    padding: 40px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .seal-item {}
+
+  .seal-item-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    margin-bottom: 10px;
+  }
+
+  .seal-item-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    word-break: break-all;
+    line-height: 1.6;
+  }
+
+  .seal-verify {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--cyan);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    margin-top: 8px;
+    display: inline-block;
+    transition: opacity 0.2s;
+  }
+  .seal-verify:hover { opacity: 0.7; }
+
+  /* ── DEMO CTA SECTION ── */
+  .demo-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 60px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .demo-section::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .demo-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--dim);
+    margin-bottom: 32px;
+  }
+
+  .demo-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .demo-title .gold { color: var(--gold); }
+
+  .demo-body {
+    font-size: 1.05rem;
+    color: var(--dim);
+    max-width: 500px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+
+  .demo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    color: var(--gold);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    padding: 18px 48px;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .demo-btn:hover {
+    background: var(--gold);
+    color: var(--navy);
+    box-shadow: 0 0 40px rgba(201,168,76,0.3);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 32px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-left {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.05em;
+    line-height: 1.7;
+  }
+
+  .footer-left a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .footer-right {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-align: right;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .concept, .layers-section, .chains-section, .seal-section { padding: 60px 24px; }
+    .demo-section, footer { padding: 60px 24px; }
+    .chains-grid { grid-template-columns: repeat(3, 1fr); }
+    .seal-box { grid-template-columns: 1fr; gap: 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .layers-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .footer-right { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="https://kesherprotocol.com">
+    <div class="nav-hex">KP</div>
+    <span class="nav-name"><span>KESHER</span> PROTOCOL</span>
+  </a>
+  <a class="nav-back" href="https://kesherprotocol.com">← VOLVER</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">SOVEREIGN INFRASTRUCTURE · MULTI-CHAIN · POST-QUANTUM</div>
+  <h1 class="hero-title">
+    AEGIS<br>
+    <span class="dim">SOVEREIGN</span><br>
+    <span class="gold">NODE</span>
+  </h1>
+  <p class="hero-sub">
+    <strong>Framework de gobernanza verificable</strong> para sistemas autónomos de IA.<br>
+    10 capas soberanas. Infraestructura con mínimas dependencias centralizadas.
+  </p>
+  <div class="node-pill">
+    <span>NODE ID ·</span> 86F84A01A830 &nbsp;|&nbsp; <span>XRP LEDGER ·</span> 104,216,729
+  </div>
+  <a class="cta-btn" href="mailto:aegis@kesherprotocol.com?subject=Solicitud%20Demo%20Privado%20AEGIS">
+    Solicitar Demo Privado <span class="cta-arrow">→</span>
+  </a>
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- CONCEPT -->
+<section class="concept reveal">
+  <div class="section-label">// CONCEPTO</div>
+  <p class="concept-text">
+    AEGIS no es un producto —<br>
+    es <span class="gold">infraestructura soberana</span>.<br>
+    <span class="dim">Diseñado para operar donde la confianza no puede depender de un tercero.</span>
+  </p>
+</section>
+
+<!-- LAYERS -->
+<section class="layers-section">
+  <div class="layers-header reveal">
+    <h2 class="layers-title">10 Capas Soberanas</h2>
+    <div class="layers-note">Los detalles de implementación<br>se revelan en Demo Privado</div>
+  </div>
+
+  <div class="layers-grid">
+    <!-- Each card has hover lock effect -->
+    <div class="layer-card reveal">
+      <div class="layer-num">CAPA 01</div>
+      <div class="layer-name">RegTech Automático</div>
+      <div class="layer-tag">ISO-20022 · AML/FATF · GDPR · SEC</div>
+      <div class="layer-locked"><span class="lock-text">DEMO PRIVADO</span></div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-num">CAPA 02</div>
+      <div class="layer-name">Dead Man's Switch</div>
+      <div class="layer-tag">BÓVEDA KYBER-512</div>
+      <div class="layer-locked"><span class="lock-text">DEMO PRIVADO</span></div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-num">CAPA 03</div>
+      <div class="layer-name">Zero-Knowledge Proof</div>
+      <div class="layer-tag">KYC SIN DATOS · PRIVACIDAD TOTAL</div>
+      <div class="layer-locked"><span class="lock-text">DEMO PRIVADO</span></div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-num">CAPA 04</div>
+      <div class="layer-name">Red Federada de Amenazas</div>
+      <div class="layer-tag">SIN SERVIDOR CENTRAL</div>
+      <div class="layer-locked"><span class="lock-text">DEMO PRIVADO</span></div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-num">CAPA 05</div>
+      <div class="layer-name">Gibberlink M2M</div>
+      <div class="layer-tag">PROTOCOLO REGISTRADO ON-CHAIN</div>
+      <div class="layer-locked"><span class="lock-text">DEMO PRIVADO</span></div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-num">CAPA 06</div>
+      <div class="layer-name">Aegis Sentinel</div>
+      <div class="layer-tag">RISK SCORING 0–100</div>
+      <div class="layer-locked"><span class="lock-text">DEMO PRIVADO</span></div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-num">CAPA 07</div>
+      <div class="layer-name">Quantum-Shield</div>
+      <div class="layer-tag">CRYSTALS-KYBER-512 · DILITHIUM-2 · NIST FIPS 203/204</div>
+      <div class="layer-locked"><span class="lock-text">DEMO PRIVADO</span></div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-num">CAPA 08</div>
+      <div class="layer-name">Anti-Tamper Shield</div>
+      <div class="layer-tag">DoD 5220.22-M · SHAMIR SSS</div>
+      <div class="layer-locked"><span class="lock-text">DEMO PRIVADO</span></div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-num">CAPA 09</div>
+      <div class="layer-name">Payroll Mesh</div>
+      <div class="layer-tag">XLM SOROBAN · XDC ISO 20022 · CBDC-READY</div>
+      <div class="layer-locked"><span class="lock-text">DEMO PRIVADO</span></div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-num">CAPA 10</div>
+      <div class="layer-name">Children Shield v1.5</div>
+      <div class="layer-tag">3 MOTORES · PANICPHRASEENGINE</div>
+      <div class="layer-locked"><span class="lock-text">DEMO PRIVADO</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAINS -->
+<section class="chains-section reveal">
+  <div class="section-label">// INFRAESTRUCTURA MULTI-CHAIN</div>
+  <div class="chains-grid">
+    <div class="chain-card">
+      <div class="chain-dot active"></div>
+      <div class="chain-name">XRP</div>
+      <div class="chain-ver">v3.4 · ACTIVO</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-dot active"></div>
+      <div class="chain-name">XLM / Stellar</div>
+      <div class="chain-ver">v4.0 · ACTIVO</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-dot active"></div>
+      <div class="chain-name">XDC / XinFin</div>
+      <div class="chain-ver">v4.0 · ACTIVO</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-dot pending"></div>
+      <div class="chain-name">Ethereum</div>
+      <div class="chain-ver">v5.0 · 2026</div>
+    </div>
+    <div class="chain-card">
+      <div class="chain-dot pending"></div>
+      <div class="chain-name">Bitcoin</div>
+      <div class="chain-ver">v5.0 · 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- IP SEAL -->
+<section class="seal-section reveal">
+  <div class="section-label">// PROPIEDAD INTELECTUAL — XRP LEDGER MAINNET</div>
+  <div class="seal-box">
+    <div class="seal-item">
+      <div class="seal-item-label">AEGIS v4.0 · IP TX HASH</div>
+      <div class="seal-item-value">1726CB652978D34EA2BF9626749AA001<br>87D7CDDDABEC7107ED50F39E6752382B</div>
+      <a class="seal-verify" href="https://xrpscan.com/tx/1726CB652978D34EA2BF9626749AA00187D7CDDDABEC7107ED50F39E6752382B" target="_blank">↗ VERIFICAR EN XRPSCAN</a>
+    </div>
+    <div class="seal-item">
+      <div class="seal-item-label">LEDGER · FECHA DE REGISTRO</div>
+      <div class="seal-item-value">Ledger #104,216,729<br>14 Mayo 2026 · XRP Mainnet</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-top:8px;letter-spacing:0.05em;">Inmutable · Verificable · Soberano</div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO CTA -->
+<section class="demo-section">
+  <div class="demo-eyebrow">ACCESO RESTRINGIDO</div>
+  <h2 class="demo-title reveal">
+    El dashboard<br>no es público.<br>
+    <span class="gold">Es por diseño.</span>
+  </h2>
+  <p class="demo-body reveal">
+    AEGIS opera en entornos donde la exposición no es una opción.
+    Si representa una institución con un caso de uso legítimo,
+    solicite acceso al demo privado.
+  </p>
+  <a class="demo-btn reveal" href="mailto:aegis@kesherprotocol.com?subject=Solicitud%20Demo%20Privado%20AEGIS%20Sovereign%20Node&body=Nombre%3A%0AOrganización%3A%0ACaso%20de%20uso%3A%0A">
+    Solicitar Acceso Privado →
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    AEGIS Sovereign Node v4.0 · by <a href="https://kesherprotocol.com">Kesher Protocol</a><br>
+    <a href="mailto:aegis@kesherprotocol.com">aegis@kesherprotocol.com</a> · Colombia · 2026
+  </div>
+  <div class="footer-right">
+    NODE ID: 86F84A01A830<br>
+    IP: XRP TX 1726CB65...2382B
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
